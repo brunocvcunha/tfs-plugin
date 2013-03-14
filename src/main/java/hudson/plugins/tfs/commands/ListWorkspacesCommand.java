@@ -36,6 +36,7 @@ public class ListWorkspacesCommand extends AbstractCommand implements ParseableC
             arguments.add(String.format("-computer:%s", computer));
         }
         addServerArgument(arguments);
+        addProxyArgument(arguments);
         addLoginArgument(arguments);
         return arguments;
     }

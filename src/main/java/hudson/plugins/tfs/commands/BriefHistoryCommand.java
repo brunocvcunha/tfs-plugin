@@ -58,6 +58,7 @@ public class BriefHistoryCommand extends AbstractCommand implements ParseableCom
         arguments.add("-recursive");
         arguments.add("-format:brief");
         addServerArgument(arguments);
+        addProxyArgument(arguments);
         addLoginArgument(arguments);
         return arguments;
     }

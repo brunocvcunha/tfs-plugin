@@ -12,21 +12,23 @@ import java.util.Map;
 public class Server implements ServerConfigurationProvider {
     
     private final String url;
+    private final String proxyServer;
     private final String userName;
     private final String userPassword;
     private Workspaces workspaces;
     private Map<String, Project> projects = new HashMap<String, Project>();
     private final TfTool tool;
 
-    public Server(TfTool tool, String url, String username, String password) {
+    public Server(TfTool tool, String url, String proxyServer, String username, String password) {
         this.tool = tool;
         this.url = url;
+        this.proxyServer = proxyServer;
         this.userName = username;
         this.userPassword = password;
     }
 
     Server(String url) {
-        this(null, url, null, null);
+        this(null, url, null, null, null);
     }
 
     public Project getProject(String projectPath) {
@@ -49,6 +51,9 @@ public class Server implements ServerConfigurationProvider {
 
     public String getUrl() {
         return url;
+    }
+    public String getProxyServer() {
+    	return proxyServer;
     }
 
     public String getUserName() {

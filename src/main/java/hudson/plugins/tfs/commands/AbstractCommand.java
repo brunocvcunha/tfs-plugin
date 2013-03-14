@@ -16,6 +16,12 @@ public abstract class AbstractCommand implements Command {
         arguments.add(String.format("-server:%s", config.getUrl()));
     }
     
+    protected void addProxyArgument(ArgumentListBuilder arguments) {
+    	if ((Util.fixEmpty(config.getProxyServer()) != null)) {
+    		arguments.add(String.format("-proxy:%s", config.getProxyServer()));
+    	}
+    }
+    
     protected void addLoginArgument(MaskedArgumentListBuilder arguments) {
         if ((Util.fixEmpty(config.getUserName()) != null) && (config.getUserPassword()!= null)) {
             arguments.addMasked(String.format("-login:%s,%s", 
@@ -24,6 +30,8 @@ public abstract class AbstractCommand implements Command {
         }
     }
 
+
+    
     public ServerConfigurationProvider getConfig() {
         return config;
     }

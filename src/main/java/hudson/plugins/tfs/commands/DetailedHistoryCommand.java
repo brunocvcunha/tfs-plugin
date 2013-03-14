@@ -97,6 +97,7 @@ public class DetailedHistoryCommand extends AbstractCommand implements Parseable
         arguments.add("-recursive");
         arguments.add("-format:detailed");        
         addServerArgument(arguments);
+        addProxyArgument(arguments);
         addLoginArgument(arguments);
         return arguments;
     }

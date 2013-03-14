@@ -6,6 +6,8 @@ public interface ServerConfigurationProvider {
 
     public String getUrl();
 
+    public String getProxyServer();
+
     public String getUserName();
 
     public String getUserPassword();

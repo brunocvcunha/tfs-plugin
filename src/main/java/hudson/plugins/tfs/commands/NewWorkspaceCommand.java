@@ -18,6 +18,7 @@ public class NewWorkspaceCommand extends AbstractCommand {
         arguments.add(String.format("%s;%s", workspaceName, getConfig().getUserName()));
         arguments.add("-noprompt");
         addServerArgument(arguments);
+        addProxyArgument(arguments);
         addLoginArgument(arguments);
         return arguments;
     }

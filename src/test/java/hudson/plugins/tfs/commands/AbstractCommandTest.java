@@ -18,6 +18,7 @@ public class AbstractCommandTest {
         AbstractCommand command = new AbstractCommandImpl(config);
         ArgumentListBuilder builder = new ArgumentListBuilder();
         command.addServerArgument(builder);
+        command.addProxyArgument(builder);
         assertEquals("The server URL was incorrect", "-server:https://tfs02.codeplex.com", builder.toCommandArray()[0]);
     }
     

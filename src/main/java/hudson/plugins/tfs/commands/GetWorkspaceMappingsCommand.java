@@ -33,6 +33,7 @@ public class GetWorkspaceMappingsCommand extends AbstractCommand implements Pars
         arguments.add("workfold");        
         arguments.add("-workspace:" + workspace);
         addServerArgument(arguments);
+        addProxyArgument(arguments);
         addLoginArgument(arguments);
         return arguments;
     }

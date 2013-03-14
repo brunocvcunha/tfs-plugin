@@ -31,6 +31,7 @@ public class MapWorkfolderCommand extends AbstractCommand {
             arguments.add(String.format("-workspace:%s", workspaceName));
         }        
         addServerArgument(arguments);
+        addProxyArgument(arguments);
         addLoginArgument(arguments);
         return arguments;
     }

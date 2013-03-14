@@ -4,6 +4,11 @@
              clazz="required" checkMessage="${%Server URL is mandatory.}"/>
     </f:entry>
     
+    <f:entry title="Proxy Server" help="/plugin/tfs/proxyServer.html">
+        <f:textbox name="tfs.proxyServer" value="${scm.proxyServer}"/>
+        <i>http://(server:port)</i>
+    </f:entry>
+    
     <f:entry title="Project path" help="/plugin/tfs/project.html">
         <f:textbox name="tfs.projectPath" value="${scm.projectPath}"
              checkUrl="'${rootURL}/scm/TeamFoundationServerScm/projectPathCheck?value='+escape(this.value)"/>

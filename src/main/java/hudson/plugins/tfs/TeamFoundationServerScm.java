@@ -60,10 +60,12 @@ public class TeamFoundationServerScm extends SCM {
     public static final String WORKFOLDER_ENV_STR = "TFS_WORKFOLDER";
     public static final String PROJECTPATH_ENV_STR = "TFS_PROJECTPATH";
     public static final String SERVERURL_ENV_STR = "TFS_SERVERURL";
+    public static final String PROXYSERVER_ENV_STR = "TFS_PROXYSERVER";
     public static final String USERNAME_ENV_STR = "TFS_USERNAME";
     public static final String WORKSPACE_CHANGESET_ENV_STR = "TFS_CHANGESET";
     
     private final String serverUrl;
+    private final String proxyServer;
     private final String projectPath;
     private final String localPath;
     private final String workspaceName;
@@ -79,8 +81,9 @@ public class TeamFoundationServerScm extends SCM {
     private static final Logger logger = Logger.getLogger(TeamFoundationServerScm.class.getName()); 
 
     @DataBoundConstructor
-    public TeamFoundationServerScm(String serverUrl, String projectPath, String localPath, boolean useUpdate, String workspaceName, String userName, String userPassword) {
+    public TeamFoundationServerScm(String serverUrl, String proxyServer, String projectPath, String localPath, boolean useUpdate, String workspaceName, String userName, String userPassword) {
         this.serverUrl = serverUrl;
+        this.proxyServer = proxyServer;
         this.projectPath = projectPath;
         this.useUpdate = useUpdate;
         this.localPath = (Util.fixEmptyAndTrim(localPath) == null ? "." : localPath);
@@ -92,6 +95,9 @@ public class TeamFoundationServerScm extends SCM {
     // Bean properties need for job configuration
     public String getServerUrl() {
         return serverUrl;
+    }
+    public String getProxyServer() {
+    	return proxyServer;
     }
 
     public String getWorkspaceName() {
@@ -134,6 +140,10 @@ public class TeamFoundationServerScm extends SCM {
         return substituteBuildParameter(run, serverUrl);
     }
 
+    public String getProxyServer(Run<?,?> run) {
+    	return substituteBuildParameter(run, proxyServer);
+    }
+
     String getProjectPath(Run<?,?> run) {
         return Util.replaceMacro(substituteBuildParameter(run, projectPath), new BuildVariableResolver(run.getParent()));
     }
@@ -151,7 +161,7 @@ public class TeamFoundationServerScm extends SCM {
     @Override
     public boolean checkout(AbstractBuild build, Launcher launcher, FilePath workspaceFilePath, BuildListener listener, File changelogFile) throws IOException, InterruptedException {
         Server server = createServer(new TfTool(getDescriptor().getTfExecutable(), launcher, listener, workspaceFilePath), build);
-        WorkspaceConfiguration workspaceConfiguration = new WorkspaceConfiguration(server.getUrl(), getWorkspaceName(build, Computer.currentComputer()), getProjectPath(build), getLocalPath());
+        WorkspaceConfiguration workspaceConfiguration = new WorkspaceConfiguration(server.getUrl(), server.getProxyServer(), getWorkspaceName(build, Computer.currentComputer()), getProjectPath(build), getLocalPath());
         
         // Check if the configuration has changed
         if (build.getPreviousBuild() != null) {
@@ -257,8 +267,12 @@ public class TeamFoundationServerScm extends SCM {
         return true;
     }
     
+    protected Server createServer(TfTool tool, String serverUrl, String proxyServer) {
+    	return new Server(tool, serverUrl, proxyServer, getUserName(), getUserPassword());
+    }
+    
     protected Server createServer(TfTool tool, Run<?,?> run) {
-        return new Server(tool, getServerUrl(run), getUserName(), getUserPassword());
+        return new Server(tool, getServerUrl(run), getProxyServer(run), getUserName(), getUserPassword());
     }
 
     @Override
@@ -300,6 +314,9 @@ public class TeamFoundationServerScm extends SCM {
         }
         if (serverUrl != null) {
             env.put(SERVERURL_ENV_STR, serverUrl);
+        }
+        if (proxyServer != null) {
+        	env.put(PROXYSERVER_ENV_STR, proxyServer);
         }
         if (userName != null) {
             env.put(USERNAME_ENV_STR, userName);
